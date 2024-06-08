@@ -3,11 +3,8 @@ import {
   Box,
   Typography,
   Button,
-  Card,
-  CardContent,
   List,
   ListItem,
-  ListSubheader,
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";

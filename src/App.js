@@ -1,24 +1,27 @@
-import * as React from "react";
 import {
   Box,
   Button,
-  Typography,
-  TextField,
   Card,
   CardContent,
   Link,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { grey, lightBlue, purple, red } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import * as React from "react";
 import "./App.css"; // Import the CSS file where the font is defined
-import { purple, grey, lightBlue } from "@mui/material/colors";
 
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link as RouterLink,
-} from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import EnterName from "./EnterName";
+import GameStarted from "./GameStarted";
+import JoinedGame from "./JoinedGame"; // Import the Joined Game component
 import NewGame from "./NewGame"; // Import the New Game component
+
+import { ref, set } from "firebase/database";
+import { useNavigate } from "react-router-dom";
+import { database } from "./firebase"; // Import Firebase configuration
+
 
 const theme = createTheme({
   typography: {
@@ -39,24 +42,44 @@ const theme = createTheme({
       contrastText: "#fff", //button text white instead of black
     },
     startGameButton: {
-      main: lightBlue[700],
+      main: lightBlue[800],
       contrastText: "#fff", //button text white instead of black
+    },
+    goback: {
+      main: red[600],
     },
   },
 });
 
 function Home() {
-  //const [lobbyCode, setLobbyCode] = React.useState("");
   const [gamePin, setGamePin] = React.useState("");
 
-  /*
-  const handleCreateGame = () => {
-    // Implement create game logic here
-  };
-  */
+  const navigate = useNavigate();
 
   const handleJoinGame = () => {
-    // Implement join game logic here
+    window.gamePin = gamePin;
+    navigate("/enter-name");
+  };
+
+  const handleCreateGame = () => {
+    const newGamePin = Math.floor(100000 + Math.random() * 900000).toString();
+    const gameRef = ref(database, `games/${newGamePin}`);
+
+    window.gamePin = newGamePin;
+    window.myGameName = "Game Creator";
+
+    set(gameRef, {
+      players: {
+        "Game Creator": true,
+      },
+    })
+      .then(() => {
+        navigate("/new-game");
+        // Navigate or update state as needed after the game is created
+      })
+      .catch((error) => {
+        console.error("Error creating game:", error);
+      });
   };
 
   return (
@@ -64,8 +87,9 @@ function Home() {
       <Box
         sx={{
           height: "100dvh",
-          background:
-            "linear-gradient(16deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)",
+          background: "linear-gradient(-45deg, rgba(63,94,251,1), rgba(252,70,107,1))",
+          backgroundSize: "200% 200%",
+          animation: "gradientMove 15s ease infinite",
           fontFamily: "Yanone Kaffeesatz, sans-serif",
         }}
       >
@@ -140,7 +164,12 @@ function Home() {
             alignItems: "center",
           }}
         >
-          <Link component={RouterLink} to="/new-game" color="inherit" variant="h6">
+          <Link
+            onClick={handleCreateGame}
+            color="inherit"
+            variant="h6"
+            sx={{ cursor: "pointer" }}
+          >
             Start a new game here
           </Link>
         </Box>
@@ -156,6 +185,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/new-game" element={<NewGame />} />
+          <Route path="/joined-game" element={<JoinedGame />} />
+          <Route path="/enter-name" element={<EnterName />} />
+          <Route path="/game-started" element={<GameStarted />} />
         </Routes>
       </Router>
     </ThemeProvider>

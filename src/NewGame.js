@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Typography
-} from "@mui/material";
+import { Box, Button, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -81,7 +74,7 @@ const NewGame = () => {
         justifyContent: "center",
         alignItems: "center",
         background:
-          "linear-gradient(16deg, rgba(219,63,251,1) 0%, rgba(111,250,66,1) 79%)",
+          "radial-gradient( circle farthest-corner at 1.5% 1.4%,  rgba(159,227,255,1) 0%, rgba(255,177,219,1) 100.2% );linear-gradient( 109.6deg,  rgba(177,173,219,1) 11.2%, rgba(245,226,226,1) 91.1% )",
         backgroundSize: "200% 200%",
         animation: "gradientMove 15s ease infinite",
       }}
@@ -114,7 +107,7 @@ const NewGame = () => {
             {players.map((item) => (
               <ListItem key={"test"}>
                 <ListItemText
-                  primaryTypographyProps={{ fontSize: 30 }}
+                  primaryTypographyProps={{ fontSize: 30, style: { color: "white" } }}
                   primary={`${item}`}
                 />
               </ListItem>
@@ -128,31 +121,32 @@ const NewGame = () => {
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
+          alignContent: "center"
         }}
       >
         <Typography
           sx={{
-            fontSize: 50,
+            fontSize: 60,
             cursor: "pointer",
             filter: language === "sv" ? "" : "grayscale(100%)",
             transition: "color 0.3s",
-            '-webkit-tap-highlight-color': 'transparent', // Remove tap highlight color on mobile
+            "-webkit-tap-highlight-color": "transparent", // Remove tap highlight color on mobile
           }}
-          onClick={() => handleChange('sv')}
+          onClick={() => handleChange("sv")}
         >
           🇸🇪
         </Typography>
         <Typography
           sx={{
-            fontSize: 50,
+            fontSize: 60,
             cursor: "pointer",
             filter: language === "en" ? "" : "grayscale(100%)",
             transition: "color 0.3s",
             marginLeft: 2,
             marginRight: 2,
-            '-webkit-tap-highlight-color': 'transparent', // Remove tap highlight color on mobile
+            "-webkit-tap-highlight-color": "transparent", // Remove tap highlight color on mobile
           }}
-          onClick={() => handleChange('en')}
+          onClick={() => handleChange("en")}
         >
           🇺🇸
         </Typography>
